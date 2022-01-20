@@ -10,10 +10,14 @@ ENCODING_FILE = 'encodings.pickle'
 
 APP_TITLE = 'facedoor'
 ACTION_ACCEPT = 'a'
+ACTION_EXIT = 'e'
+AUTHORIZED_NAMES = ['moncada', 'neo', 'trinity']
 
 if __name__ == '__main__':
     img_check = cv2.imread('resources/check.png', cv2.COLOR_BGR2RGB)
+    img_check = cv2.resize(img_check, (100, 100))
     img_forbidden = cv2.imread('resources/forbidden.png', cv2.COLOR_BGR2RGB)
+    img_forbidden = cv2.resize(img_forbidden, (100, 100))
 
     faceCascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
@@ -37,8 +41,11 @@ if __name__ == '__main__':
             # Display the resulting frame
             cv2.imshow(APP_TITLE, rectangle)
 
-            if cv2.waitKey(1) & 0xFF == ord(ACTION_ACCEPT):
+            action = cv2.waitKey(1) & 0xFF
+            if action == ord(ACTION_ACCEPT):
                 break
+            elif action == ord(ACTION_EXIT):
+                exit()
 
         cv2.imshow(APP_TITLE, frame)
 
@@ -99,10 +106,35 @@ if __name__ == '__main__':
                         0.75, (0, 255, 0), 2)
         # show the output image
         cv2.imshow(APP_TITLE, named_image)
-        cv2.waitKey(0)
+        cv2.waitKey(1000)
 
-        # TODO: if accepted then show accept message in screen
+        result_image = np.copy(named_image)
+        result_r = int(result_image.shape[0])
+        result_c = int(result_image.shape[1])
+
+        img_acess = None
+        if any(item in names for item in AUTHORIZED_NAMES):
+            img_access = np.copy(img_check)
+            cv2.putText(result_image, 'Welcome back', (100, 100), cv2.FONT_HERSHEY_SIMPLEX,
+                        0.75, (0, 255, 0), 2)
+        else:
+            img_access = np.copy(img_forbidden)
+            cv2.putText(result_image, 'Access denied', (100, 100), cv2.FONT_HERSHEY_SIMPLEX,
+                        0.75, (0, 0, 255), 2)
+
+        img_r = int(img_access.shape[0])
+        img_c = int(img_access.shape[1])
+        f_0 = result_r // 2 - img_r // 2
+        f_1 = result_r // 2 + img_r // 2
+        c_0 = result_c // 2 - img_c // 2
+        c_1 = result_c // 2 + img_c // 2
+
+        result_image[f_0:f_1, c_0:c_1] = img_access
+
+        cv2.imshow(APP_TITLE, result_image)
+        cv2.waitKey(1000)
+        # cv2.waitKey(0)
 
         # When everything is done, release the capture
-        video_capture.release()
-        cv2.destroyAllWindows()
+        # video_capture.release()
+        # cv2.destroyAllWindows()
