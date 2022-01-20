@@ -5,8 +5,12 @@ import argparse
 import pickle
 import cv2
 import os
+import time
 
 if __name__ == '__main__':
+
+    t = time.time()
+
     # construct the argument parser and parse the arguments
     ap = argparse.ArgumentParser()
     ap.add_argument("-i", "--dataset", required=True,
@@ -18,7 +22,7 @@ if __name__ == '__main__':
     args = vars(ap.parse_args())
 
     # grab the paths to the input images in our dataset
-    print("[INFO] quantifying faces...")
+    print("[INFO] Cuantificando caras...")
     imagePaths = list(paths.list_images(args["dataset"]))
     # initialize the list of known encodings and known names
     knownEncodings = []
@@ -27,9 +31,9 @@ if __name__ == '__main__':
     # loop over the image paths
     for (i, imagePath) in enumerate(imagePaths):
         # extract the person name from the image path
-        print("[INFO] processing image {}/{}".format(i + 1,
-                                                     len(imagePaths)))
         name = imagePath.split(os.path.sep)[-2]
+        print("[INFO] Procesando imagen {}/{} de {}".format(i + 1,
+                                                            len(imagePaths), name))
         # load the input image and convert it from BGR (OpenCV ordering)
         # to dlib ordering (RGB)
         image = cv2.imread(imagePath)
@@ -49,8 +53,10 @@ if __name__ == '__main__':
             knownNames.append(name)
 
     # dump the facial encodings + names to disk
-    print("[INFO] serializing encodings...")
+    print("[INFO] Serializando encodings...")
     data = {"encodings": knownEncodings, "names": knownNames}
     f = open(args["encodings"], "wb")
     f.write(pickle.dumps(data))
     f.close()
+
+    print('[INFO] Duración: '+str(time.time()-t))

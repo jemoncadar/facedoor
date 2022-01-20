@@ -3,8 +3,11 @@ import face_recognition
 import argparse
 import pickle
 import cv2
+import time
 
 if __name__ == '__main__':
+
+    t = time.time()
     # construct the argument parser and parse the arguments
     ap = argparse.ArgumentParser()
     ap.add_argument("-e", "--encodings", required=True,
@@ -16,7 +19,7 @@ if __name__ == '__main__':
     args = vars(ap.parse_args())
 
     # load the known faces and embeddings
-    print("[INFO] loading encodings...")
+    print("[INFO] Cargando encodings...")
     data = pickle.loads(open(args["encodings"], "rb").read())
     # load the input image and convert it from BGR to RGB
     image = cv2.imread(args["image"])
@@ -24,7 +27,7 @@ if __name__ == '__main__':
     # detect the (x, y)-coordinates of the bounding boxes corresponding
     # to each face in the input image, then compute the facial embeddings
     # for each face
-    print("[INFO] recognizing faces...")
+    print("[INFO] Reconociendo caras...")
     boxes = face_recognition.face_locations(rgb,
                                             model=args["detection_method"])
     encodings = face_recognition.face_encodings(rgb, boxes)
@@ -36,7 +39,7 @@ if __name__ == '__main__':
         # attempt to match each face in the input image to our known
         # encodings
         matches = face_recognition.compare_faces(data["encodings"],
-                                                 encoding)
+                                                 encoding, tolerance=0.5)
         name = "Unknown"
 
         # check to see if we have found a match
@@ -66,6 +69,8 @@ if __name__ == '__main__':
         y = top - 15 if top - 15 > 15 else top + 15
         cv2.putText(image, name, (left, y), cv2.FONT_HERSHEY_SIMPLEX,
                     0.75, (0, 255, 0), 2)
+
+    print ('[INFO] El proceso llevó '+str(time.time()-t)+' segundos')
     # show the output image
-    cv2.imshow("Image", image)
+    cv2.imshow("facedoor", image)
     cv2.waitKey(0)

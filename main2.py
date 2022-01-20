@@ -11,13 +11,17 @@ ENCODING_FILE = 'encodings.pickle'
 APP_TITLE = 'facedoor'
 ACTION_ACCEPT = 'a'
 ACTION_EXIT = 'e'
+UNKNOWN = 'Unknown'
 AUTHORIZED_NAMES = ['moncada', 'neo', 'trinity']
 
 if __name__ == '__main__':
     img_check = cv2.imread('resources/check.png', cv2.COLOR_BGR2RGB)
-    img_check = cv2.resize(img_check, (100, 100))
+    img_check = cv2.resize(img_check, (200, 200))
     img_forbidden = cv2.imread('resources/forbidden.png', cv2.COLOR_BGR2RGB)
-    img_forbidden = cv2.resize(img_forbidden, (100, 100))
+    img_forbidden = cv2.resize(img_forbidden, (200, 200))
+
+    cv2.namedWindow(APP_TITLE, cv2.WND_PROP_FULLSCREEN)
+    cv2.setWindowProperty(APP_TITLE, cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
 
     faceCascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
@@ -73,7 +77,7 @@ if __name__ == '__main__':
             # attempt to match each face in the input image to our known
             # encodings
             matches = face_recognition.compare_faces(data['encodings'],
-                                                     encoding)
+                                                     encoding, tolerance=0.5)
             name = "Unknown"
 
             # check to see if we have found a match
@@ -99,11 +103,15 @@ if __name__ == '__main__':
         named_image = np.copy(frame)
         # loop over the recognized faces
         for ((top, right, bottom, left), name) in zip(faces_t, names):
+            color = (0, 255, 0)
+            if name == UNKNOWN:
+                color = (0, 0, 255)
+
             # draw the predicted face name on the image
-            cv2.rectangle(named_image, (left, top), (right, bottom), (0, 255, 0), 2)
+            cv2.rectangle(named_image, (left, top), (right, bottom), color, 2)
             y = top - 15 if top - 15 > 15 else top + 15
             cv2.putText(named_image, name, (left, y), cv2.FONT_HERSHEY_SIMPLEX,
-                        0.75, (0, 255, 0), 2)
+                        0.75, color, 2)
         # show the output image
         cv2.imshow(APP_TITLE, named_image)
         cv2.waitKey(1000)
@@ -115,12 +123,13 @@ if __name__ == '__main__':
         img_acess = None
         if any(item in names for item in AUTHORIZED_NAMES):
             img_access = np.copy(img_check)
-            cv2.putText(result_image, 'Welcome back', (100, 100), cv2.FONT_HERSHEY_SIMPLEX,
-                        0.75, (0, 255, 0), 2)
+            cv2.putText(result_image, 'Bienvenido, ' + names[0], (10, 50), cv2.FONT_HERSHEY_SIMPLEX,
+                        1, (0, 255, 0), 2)
+            print('[INFO] Acceso detectado a nombre de: ' + names[0])
         else:
             img_access = np.copy(img_forbidden)
-            cv2.putText(result_image, 'Access denied', (100, 100), cv2.FONT_HERSHEY_SIMPLEX,
-                        0.75, (0, 0, 255), 2)
+            cv2.putText(result_image, 'Acceso denegado', (10, 50), cv2.FONT_HERSHEY_SIMPLEX,
+                        1, (0, 0, 255), 2)
 
         img_r = int(img_access.shape[0])
         img_c = int(img_access.shape[1])
