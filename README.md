@@ -34,6 +34,8 @@ After that, a *pickle* file will have been created (named _encodings.pickle_) an
 
 ``python3 main.py``
 
+At this point if you press ``a`` a photo will be taken and the program will check the access permissions of the people in it; if you press ``q`` it will finish the execution.
+
 # Results
 The results obtained were good and satisfied the goals of the project. In the following image results, **facedoor** was executed _offline_ (with images not coming from a camera, you can do this with the file ``recognize_faces_image.py``). Note that for this examples we have used a dataset with 20 photos of two of the main person of the _Matrix_ saga, Neo and Trinty. Faces of other people won't be recognized until you add photos of them to the ``dataset/`` folder!
 ![Result 1](https://github.com/jemoncadar/facedoor/blob/main/examples/result2.png?raw=true)
