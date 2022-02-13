@@ -34,6 +34,6 @@ After that, a *pickle* file will have been created (named _encodings.pickle_) an
 
 # Results
 The results obtained were good and satisfied the goals of the project. For example, executing **facedoor** _offline_ (with images not coming from a camera) we can observe that faces are recognized properly. Note that for this examples we have used a dataset of two of the main person of the _Matrix_ saga, Neo and Trinty. Faces of other people won't be recognized.
-![alt text](https://github.com/jemoncadar/facedoor/examples/result2.jpg?raw=true)
-![alt text](https://github.com/jemoncadar/facedoor/examples/result3.jpg?raw=true)
-![alt text](https://github.com/jemoncadar/facedoor/examples/result7.jpg?raw=true)
+![](https://github.com/jemoncadar/facedoor/examples/result2.jpg?raw=true)
+![](https://github.com/jemoncadar/facedoor/examples/result3.jpg?raw=true)
+![](https://github.com/jemoncadar/facedoor/examples/result7.jpg?raw=true)
