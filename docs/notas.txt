@@ -1,4 +1,0 @@
-Notas de instalación:
-- Instalar dlib
-	- Instalar CMake
-	- Instalar Visual Studio C++
