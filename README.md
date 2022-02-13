@@ -24,3 +24,14 @@ Note that you will need two packages more to run ``dlib``:
 [Face-recognition](https://face-recognition.readthedocs.io/en/latest/readme.html) is an easy-to-use library that manipulates and recognize faces from Python. It is built using _dlib_. It could be installed with: ``pip3 install face_recognition``.
 
 # How to run
+First of all you will need to add photos of the persons you want to give access. For each user are needed at least 20 photos; that photos should be placed in the folder ``dataset/username`` (where ``username`` is the username of the person in the system). These photos don't need to be face-cropped, because before of processing it, the program will execute a face detection algorithm. One important thing is: there only can be one face in the photos, and it must be the one of the user we want to add. The next step is to obtein the features vectors of the dataset photos. It is a long lasting process because it executes complex face detection algorithms (either CNN or HOG). For this reason this process should be performed once, at the installation of **facedoor**. You can do this by executing:
+
+``python3 encode_faces.py -i dataset -e encodings.pickle``
+
+After that, a *pickle* file will have been created (named _encodings.pickle_) and it will contains the features vectors of each face of the dataset. The next step is to run the main program, for that you shoud execute:
+
+``python3 main.py``
+
+# Results
+The results obtained were good and satisfied the goals of the project. For example, executing **facedoor** _offline_ (with images not coming from a camera) we can observe that faces are recognized properly. Note that for this examples we have used a dataset of two of the main person of the _Matrix_ saga, Neo and Trinty. Faces of other people won't be recognized.
+
