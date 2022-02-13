@@ -25,6 +25,9 @@ Note that you will need two packages more to run ``dlib``:
 ## face-recognition
 [Face-recognition](https://face-recognition.readthedocs.io/en/latest/readme.html) is an easy to use library that manipulates and recognize faces from Python. It is built using ``dlib``. It could be installed with: ``pip3 install face_recognition``.
 
+## imutils
+[imutils](https://github.com/PyImageSearch/imutils) Incorporates a series of convenience functions to make basic image processing functions such as translation, rotation, resizing, skeletonization, and displaying Matplotlib images easier with OpenCV and both Python 2.7 and Python 3. It can be installed with: ``pip install imutils``.
+
 # How to run
 First of all you will need to add photos of the persons you want to give access. For each user are needed at least 20 photos; that photos should be placed in the folder ``dataset/username`` (where ``username`` is the username of the person in the system). These photos don't need to be face-cropped, because before of processing it, the program will execute a face detection algorithm. One important thing is: there only can be one face in the photos, and it must be the one of the user we want to add. The next step is to obtain the features vectors of the dataset photos. It is a long lasting process because it executes complex face detection algorithms (either CNN or HOG). For this reason this process should be performed once, at the installation of **facedoor**. You can do this by executing:
 
